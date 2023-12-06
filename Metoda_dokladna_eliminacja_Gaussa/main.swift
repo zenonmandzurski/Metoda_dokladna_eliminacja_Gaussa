@@ -4,15 +4,15 @@
 //Numer indeksu: 163708
 //Grupa Dziekańska: U2 Semestr
 
-import Foundation
+import Foundation // Importuje moduł Foundation, który zawiera podstawowe funkcje i typy w Swift.
 
 // Funkcja rozwiązująca układ równań metodą eliminacji Gaussa
 func eliminacjaGaussa(A: [[Double]], B: [Double]) -> [Double] {
-    var A = A // Kopia macierzy współczynników
-    var B = B // Kopia wektora wynikowego
-    let n = A.count // Liczba równań
+    var A = A // Tworzy kopię macierzy współczynników.
+    var B = B // Tworzy kopię wektora wynikowego.
+    let n = A.count // Liczba równań w macierzy A.
 
-    // Eliminacja współczynników
+    // Eliminacja współczynników w macierzy A i modyfikacja wektora wynikowego B.
     for k in 0..<n - 1 {
         for i in k + 1..<n {
             let factor = A[i][k] / A[k][k]
@@ -23,8 +23,8 @@ func eliminacjaGaussa(A: [[Double]], B: [Double]) -> [Double] {
         }
     }
 
-    // Rozwiązanie równań
-    var X = [Double](repeating: 0, count: n) // Lista rozwiązań
+    // Rozwiązanie równań z wykorzystaniem metody wstecznej substytucji.
+    var X = [Double](repeating: 0, count: n) // Inicjalizacja listy rozwiązań.
     for i in stride(from: n - 1, through: 0, by: -1) {
         X[i] = B[i] / A[i][i]
         for j in stride(from: i + 1, to: n, by: 1) {
@@ -32,21 +32,21 @@ func eliminacjaGaussa(A: [[Double]], B: [Double]) -> [Double] {
         }
     }
 
-    return X // Zwraca listę rozwiązań
+    return X // Zwraca listę rozwiązań.
 }
 
-// Funkcja rozwiązująca układ równań odczytująca dane z pliku
+// Funkcja rozwiązująca układ równań odczytująca dane z pliku.
 func eliminacjaGaussaZPliku(nazwaPliku: String) -> [Double]? {
-    // Sprawdza istnienie pliku i odczytuje dane
+    // Sprawdza istnienie pliku i odczytuje jego zawartość.
     if let fileURL = Bundle.main.url(forResource: nazwaPliku, withExtension: "txt") {
         do {
             let data = try String(contentsOf: fileURL)
             let lines = data.components(separatedBy: .newlines)
 
-            var A = [[Double]]()
-            var B = [Double]()
+            var A = [[Double]]() // Inicjalizacja macierzy współczynników A.
+            var B = [Double]() // Inicjalizacja wektora wynikowego B.
 
-            // Przetwarza linie pliku na macierz współczynników A i wektor wynikowy B
+            // Przetwarza linie pliku na macierz współczynników A i wektor wynikowy B.
             for line in lines {
                 let values = line.components(separatedBy: " ").compactMap { Double($0) }
 
@@ -58,7 +58,7 @@ func eliminacjaGaussaZPliku(nazwaPliku: String) -> [Double]? {
                 }
             }
 
-            // Wywołuje funkcję eliminacji Gaussa i zwraca wynik
+            // Wywołuje funkcję eliminacji Gaussa i zwraca wynik.
             return eliminacjaGaussa(A: A, B: B)
         } catch {
             print("Błąd podczas odczytu pliku: \(error)")
@@ -70,7 +70,7 @@ func eliminacjaGaussaZPliku(nazwaPliku: String) -> [Double]? {
     }
 }
 
-// Wywołanie funkcji z pliku 'test.txt' i wyświetlenie wyniku
+// Wywołanie funkcji eliminacjaGaussaZPliku dla pliku 'test.txt' i wyświetlenie wyniku.
 if let wynik = eliminacjaGaussaZPliku(nazwaPliku: "test") {
     print("Rozwiązania:", wynik)
 }
